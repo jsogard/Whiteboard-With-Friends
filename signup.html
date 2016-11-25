@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Sign Up</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script>
+
+$(document).ready(function(){
+	$(document).keypress(function(event){
+		if(event.which == 13)
+		{
+			$('#submit').click();
+		}
+	});
+	
+	$('#submit').click(function(){
+		var pwd = $('#password').val();
+		var con = $('#confirm').val();
+
+		if(pwd == null || pwd == "" || pwd != con)
+		{
+			$("#error").html("Invalid Password");
+			return;
+		}
+
+		var error = "";
+		var uname = $('#username').val();
+
+		if(uname == null || uname == "")
+		{
+			$("#error").html("Invalid Username");
+			return;
+		}
+
+		$.ajax({
+			url: "./signup.php",
+			async: false,
+			
+			data: {
+				username: uname,
+				password: pwd
+			},
+			
+			type: "POST",
+			success: function(result){
+				if(result.length == 0)
+				{
+					window.open("./login.html",'_self',false);
+				}
+				else
+				{
+					error = result;
+				}
+			}
+		});
+
+
+		$("#error").html(error);
+	});
+});
+
+</script>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="form">
+
+Username:<input type="text" id="username"><br><br>
+Password:<input type="password" id="password"><br><br>
+Confirm Password:<input type="password" id="confirm"><br><br>
+<button id="submit">Submit</button>
+
+<h4 id="error"></h4>
+</div>
+
+</body>
+</html>
