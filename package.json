@@ -10,7 +10,7 @@
   "contributors": [],
   "repository": {
     "type": "git",
-    "url": "git@github.com:jsogard/Whiteboard-With-Friends.git"
+    "url": "git://github.com/jsogard/Whiteboard-With-Friends.git"
   },
   "bugs:": "https://github.com/jsogard/Whiteboard-With-Friends/issues",
   "engines": {
