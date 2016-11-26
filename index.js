@@ -4,7 +4,7 @@ var PORT = process.env.PORT || 3000;
 //create server object
 var app = http.createServer(function(req,res){
   console.log("Received Request");
-  res.end("Hello World");
+  res.end("Hello World - whiteboard");
 });
 
 //start server
