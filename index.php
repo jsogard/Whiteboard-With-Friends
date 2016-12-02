@@ -2,6 +2,8 @@
 
 echo "Starting page";
 
+/*
+
 $url = parse_url(getenv("CLEARDB_DATABASE_URL"));
 
 $server = ;
@@ -18,5 +20,6 @@ else
 {
 	echo "Connected!"
 }
+*/
 
 ?>
