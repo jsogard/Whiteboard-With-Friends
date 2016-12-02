@@ -1,4 +1,7 @@
 <?php
+
+echo "Starting page";
+
 $url = parse_url(getenv("CLEARDB_DATABASE_URL"));
 
 $server = ;
@@ -10,6 +13,10 @@ $conn = new mysqli($server, $username, $password, $db);
 
 if($mysqli->connect_errno){
 	echo "Connection failed: ".$mysqli->connect_error;
+}
+else
+{
+	echo "Connected!"
 }
 
 ?>
