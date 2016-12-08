@@ -11,6 +11,7 @@ h1, h2, .button{
     font-family: 'Shrikhand', cursive;
 }
 
+
 ul{
     list-style-type: none;
     margin: auto;
@@ -24,24 +25,34 @@ li{
     float: left;
     width: 25%;
 }
-li a{
+li *{
     display: block;
     color: black;
     text-align: center;
     padding: 14px 16px;
     text-decoration: none;
 }
-
 li:hover{
     background-color: #fff;
 }
 
-.thumb{
 
+
+
+
+.thumb{
+    width: auto;
+    margin: auto;
 }
 
-img{
-    width: 100%;
+.thumb h2, .thumb h4{
+    width: auto;
+    margin: auto;
+    overflow: hidden;
+}
+.thumb img{
+    width: 216px;
+    margin: 12px;
 }
 
 
@@ -54,16 +65,18 @@ img{
 
 td{
     width: 240px;
-    border-spacing: 12px;
+    border-bottom: 24px solid transparent;
 }
 
 table{
-    width:100%;
-    margin:24px;
-    border-spacing: 12px;
+    text-align: center;
+    margin: auto;
+    width: 100%;
+    vertical-align: bottom;
+    
 }
 
-.rounded, canvas, .gallery td img{
+canvas, .gallery td img, .thumb img{
     box-shadow: 0 4px 10px 0 #222;
     border-radius: 20px;
 }
