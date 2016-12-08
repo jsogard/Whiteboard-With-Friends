@@ -1,32 +1,71 @@
 body{
 	background: #c0cdd8;
-    font-family: 'Shrikhand', cursive;
+    font-family: 'Montserrat', sans-serif;
     user-select: none;
-}
-h1, h3{
     text-align: center;
-    margin: 36px;
-    user-select: none;
+    min-width: 768px;
+    color: black;
 }
 
-h2{
-    text-align: center;
-    margin: 0px;
-    user-select: none;
+h1, h2, .button{
+    font-family: 'Shrikhand', cursive;
 }
+
+ul{
+    list-style-type: none;
+    margin: auto;
+    padding: 0;
+    overflow: hidden;
+    background-color: aliceblue;
+    border-radius: 12px;
+    width: 70%;
+}
+li{
+    float: left;
+    width: 25%;
+}
+li a{
+    display: block;
+    color: black;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+li:hover{
+    background-color: #fff;
+}
+
+.thumb{
+
+}
+
+img{
+    width: 100%;
+}
+
+
 
 .tools td{
     height: 120px;
 }
 
-th{
-    user-select: none;
-}
+
 
 td{
-    margin: 0px;
-    width: 140px;
-    text-align: center;
+    width: 240px;
+    border-spacing: 12px;
+}
+
+table{
+    width:100%;
+    margin:24px;
+    border-spacing: 12px;
+}
+
+.rounded, canvas, .gallery td img{
+    box-shadow: 0 4px 10px 0 #222;
+    border-radius: 20px;
 }
 
 canvas{
@@ -64,14 +103,12 @@ canvas{
     border-radius: 50px;
 }
 
-button{
+.button{
     display: inline-block;
     margin: auto;
     width: 160px;
     padding: 20px;
-    font-family: 'Shrikhand', cursive;
     font-size: 110%;
-    box-shadow: 0 2px 4px 0 #222;
     border-radius: 10px;
 }
 
