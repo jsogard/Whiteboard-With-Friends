@@ -25,19 +25,31 @@ li{
     float: left;
     width: 25%;
 }
-li *{
+li a{
     display: block;
     color: black;
     text-align: center;
     padding: 14px 16px;
     text-decoration: none;
+    margin: auto;
 }
 li:hover{
     background-color: #fff;
 }
 
 
-
+ul.gallerywall{
+    width: 100%;
+    max-width: 1400px;
+}
+.gallerywall li{
+    padding: 12px 0px 48px 0px;
+}
+@media (max-width: 1000px){
+    .gallerywall li{
+        width: 33.33333%;
+    }
+}
 
 
 .thumb{
