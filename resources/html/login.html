@@ -1,0 +1,21 @@
+<h2>Login / Sign Up</h2>
+<div id="form">
+
+	<div id="login">
+		<h1 id="hello">Hello!</h1>
+		Username:<br><input type="text" ng-focus="true" ng-style="{'background-color': valid.login.username}" ng-model="l_username"><br>
+		Password:<br><input type="password" ng-style="{'background-color': valid.login.password}" ng-model="l_password"><br>
+		<button ng-click="login(l_username,l_password)">Log In</button>
+	</div>
+
+	<div id="break"></div>
+
+	<div id="signup">
+		Username:<br><input type="text" ng-style="{'background-color': valid.signup.username}" ng-model="s_username"><br>
+		Password:<br><input type="password" ng-style="{'background-color': valid.signup.password}" ng-model="s_password"><br>
+		Confirm Password:<br><input type="password" ng-style="{'background-color': valid.signup.confirm}" ng-model="s_confirm"><br>
+		<button ng-click="signup(s_username,s_password,s_confirm)">Sign Up</button>
+	</div>
+
+</div>
+{{error}}

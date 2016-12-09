@@ -1,6 +1,7 @@
 <?php
 
 // mysql -h mysql.cs.iastate.edu -u dbu319t17 -p db319t17
+$json = json_decode(key($_POST));
 
 $link = mysqli_connect(
 	"mysql.cs.iastate.edu",
@@ -11,17 +12,16 @@ $link = mysqli_connect(
 $query = "
 SELECT password
 FROM users
-WHERE username='".$_POST['username']."';";
+WHERE username='".$json->username."';";
 
 $result = mysqli_query($link,$query);
 
 if($result == false || mysqli_num_rows($result) == 0)
 {
 	$query = "
-	INSERT INTO users
-	VALUES('".$_POST['username']."','".$_POST['password']."',0);";
+	INSERT INTO users(username,password,online)
+	VALUES(\"".$json->username."\",\"".$json->password."\",0);";
 	mysqli_query($link,$query);
-	echo "";
 }
 else
 {
