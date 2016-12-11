@@ -1,9 +1,8 @@
 $(document).ready(function() {
-    /*
     setInterval(function(){getbs();}, 100);
     getonline();
     setInterval(function(){getonline();},5000);
-    */
+    
     var maxPoints = 200;
     
     var color = "#3e86fa";
@@ -147,7 +146,7 @@ $(document).ready(function() {
         console.log("length: "+s.length+"\npath len: "+bs.path.length);
         console.log("sending bs");
         $.ajax({
-            url: "./resources/php/sendbs.php",
+            url: "./sendbs.php",
             async: true,
             data: {
                 password: 'chocolate',
@@ -160,7 +159,7 @@ $(document).ready(function() {
     function getbs(){
         if(mouseDown) return;
         $.ajax({
-            url: "./resources/php/getbs.php",
+            url: "./getbs.php",
             async: true,
             data: {
                 password: 'chocolate'
@@ -188,7 +187,7 @@ $(document).ready(function() {
 
     function clearbs(){
         $.ajax({
-            url: "./resources/php/clearbs.php",
+            url: "./clearbs.php",
             async: true,
             data: {
                 password: 'chocolate'
@@ -199,7 +198,7 @@ $(document).ready(function() {
 
     function getonline(){
         $.ajax({
-            url: "./resources/php/online.php",
+            url: "./online.php",
             async: true,
             success: function(result){
                 $("#online").html(result);

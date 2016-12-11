@@ -2,7 +2,6 @@
 
 //$pass = $_POST['password'];
 $pass = 'chocolate';
-$id = $_POST['id'];
 if($pass != 'chocolate')
 {
 	echo "You do not have permission";
@@ -17,11 +16,9 @@ $link = mysqli_connect(
 
 $json = $_POST['stroke'];
 $query = "
-INSERT INTO strokes(json,board_id)
-VALUES('".$json."',".$id.");";
+INSERT INTO strokes(json)
+VALUES('".$json."');";
 
 mysqli_query($link,$query);
-
-mysqli_query($link,"UPDATE boards SET modified=NOW() WHERE id=".$id.";");
 
 ?>

@@ -1,6 +1,5 @@
 /* LOGIN CONTROLLER */
 mainApp.controller('loginCtrl', function($scope,$http,$location) {
-
 	$scope.stylesheets = [
 		{
 			href: "./login.css",
@@ -61,7 +60,7 @@ mainApp.controller('loginCtrl', function($scope,$http,$location) {
 				return;
 			}
 			username = user;
-			$location.url('/gallery');
+			$location.url('/dashboard');
 			
 		}, function(error){
 			console.log("Login error: "+error);

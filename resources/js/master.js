@@ -1,12 +1,6 @@
 
 var mainApp = angular.module("mainApp", ['ngRoute']);
 var username = null;
-var curr_board = {
-	id: null,
-	name: null,
-	owner: null,
-	read_write: null
-};
 
 
 /* ROUTER */
@@ -18,24 +12,9 @@ mainApp.config(['$routeProvider', function($routeProvider) {
 		controller: 'loginCtrl'
 	}).
 
-	when('/gallery', {
-		templateUrl: 'gallery.html',
-		controller: 'galleryCtrl'
-	}).
-
-	when('/profile', {
-		templateUrl: 'profile.html',
-		controller: 'profileCtrl'
-	}).
-
-	when('/drawing', {
-		templateUrl: 'drawing.html',
-		controller: 'drawingCtrl'
-	}).
-
-	when('/newBoard', {
-		templateUrl: 'newBoard.html',
-		controller: 'newBoardCtrl'
+	when('/dashboard', {
+		templateUrl: 'dashboard.html',
+		controller: 'dashboardCtrl'
 	}).
 
 	otherwise({
