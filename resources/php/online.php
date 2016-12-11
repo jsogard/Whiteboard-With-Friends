@@ -9,10 +9,10 @@ $link = mysqli_connect(
 	"db319t17");
 
 $query = "
-SELECT username, online
-FROM users
-WHERE username<>'".$_SESSION['user']['username']."' 
-AND online=1;";
+SELECT user
+FROM online
+WHERE user<>'".$_SESSION['user']['username']."' 
+AND board_id LIKE '%[".$_POST['board_id']."]%';";
 
 $result = mysqli_query($link,$query);
 

@@ -1,6 +1,7 @@
 <?php
 
 $pass = $_POST['password'];
+$id = $_POST['id'];
 //$pass = 'chocolate';
 if($pass != 'chocolate')
 {
@@ -17,6 +18,7 @@ $link = mysqli_connect(
 $query = "
 SELECT json
 FROM strokes
+WHERE board_id=".$id."
 ORDER BY id ASC;";
 $result = mysqli_query($link,$query);
 

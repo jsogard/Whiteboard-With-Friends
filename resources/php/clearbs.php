@@ -1,6 +1,7 @@
 <?php
 
 $pass = $_POST['password'];
+$id = $_POST['id'];
 //$pass = 'chocolate';
 if($pass != 'chocolate')
 {
@@ -16,8 +17,9 @@ $link = mysqli_connect(
 
 $query = "
 DELETE FROM strokes
-WHERE true;";
+WHERE board_id=".$id.";";
 
 mysqli_query($link,$query);
+mysqli_query($link,"UPDATE boards SET modified=NOW() WHERE id=".$id.";");
 
 ?>

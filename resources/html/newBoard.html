@@ -1,0 +1,16 @@
+<h2>Make a New Board</h2>
+<div id="form">
+
+	Board Name:<br><input type="text" ng-focus="true" ng-style="{'background-color': valid.login.username}" ng-model="board.name"><br>
+	<input type="checkbox" ng-model="board.public">Public<br>
+	
+	<span ng-if="board.public != true">
+		Drawers:<br><input type="text" ng-model="board.writers"><br>
+		Watchers:<br><input type="text" ng-model="board.readers"><br>
+	</span>
+	<button ng-click="submit()">Create</button>
+
+</div>
+{{error}}
+{{php}}
+{{board | json}}

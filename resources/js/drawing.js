@@ -1,9 +1,61 @@
 $(document).ready(function() {
-    /*
+
+
+    var info = {
+        username: null,
+        board_owner: null,
+        board_name: null,
+        board_id: null,
+        read_write: null
+    };
+
+    $.ajax({
+        url: "./resources/php/drawing.php",
+        async: false,
+        method: 'POST',
+        data: {
+            action: "get"
+        },
+        
+        success: function(result){
+            console.log('ajax:\n'+result);
+            info = jQuery.parseJSON(result);
+            $(".Title").html(info.name);
+            $("#owner").html("by "+info.owner);
+            $("#name").html("Hello, "+info.username);
+            if(info.read_write == "write")
+            {
+                $("#buttons").append("<td><button id=\"erase\" style=\"background-color: #f284bf;\">Erase All</button></td>");
+                $("#tools").append('\
+                    <div class="tools">\
+                        <h2>Tools</h2>\
+                        <table>\
+                            <tr>\
+                                <th>Color</th>\
+                                <th>Size</th>\
+                                <th>Preview</th>\
+                            </tr>\
+                            <tr>\
+                                <td><input type="text" value="#3e86fa" id="colorPicker"/></td>\
+                                <td><input type="range" min="1" max="100" id="size"/></td>\
+                                <td><div id="brush"></div></td>\
+                            </tr>\
+                        </table>\
+                    </div>');
+            }
+            console.log(info);
+        }
+    });
+
+
+    
     setInterval(function(){getbs();}, 100);
     getonline();
-    setInterval(function(){getonline();},5000);
-    */
+    setInterval(function(){getonline();updatethumb();},5000);
+    
+    console.log('test');
+    console.log("drawing.js:\n"+info);
+
     var maxPoints = 200;
     
     var color = "#3e86fa";
@@ -45,7 +97,8 @@ $(document).ready(function() {
     
     $("#save").click(function(){
         var data = canvas.get(0).toDataURL();
-        console.log(data);
+
+        //console.log(data);
         window.open(data);
     });
     
@@ -60,12 +113,14 @@ $(document).ready(function() {
     
     
     canvas.mousedown(function(e){
+        if(info.read_write == 'read') return;
         lastEvent = e;
         mouseDown = true;
         path = [];
         path.push(lastEvent.offsetX);
         path.push(lastEvent.offsetY);
     }).mousemove(function(e){
+        if(info.read_write == 'read') return;
         if(mouseDown) {
             
             if(path.length > maxPoints-2){
@@ -96,6 +151,7 @@ $(document).ready(function() {
             }
         }
     }).mouseup(function(){
+        if(info.read_write == 'read') return;
         mouseDown = false;
         
         //bs = new BrushStroke("pink", size, path);
@@ -107,6 +163,7 @@ $(document).ready(function() {
         applyBrushStroke(bs); // this will repeat the same stroke so it won't look different unless you modify the constructor a few lines up.
         path = [];
     }).mouseleave(function(){
+        if(info.read_write == 'read') return;
         canvas.mouseup();
     });
     
@@ -151,10 +208,12 @@ $(document).ready(function() {
             async: true,
             data: {
                 password: 'chocolate',
-                stroke: s
+                stroke: s,
+                id: info.id
             },
             method: 'POST'
         });
+        updatethumb();
     }
 
     function getbs(){
@@ -163,7 +222,8 @@ $(document).ready(function() {
             url: "./resources/php/getbs.php",
             async: true,
             data: {
-                password: 'chocolate'
+                password: 'chocolate',
+                id: info.id
             },
             method: 'POST',
             success: function(result){
@@ -191,20 +251,44 @@ $(document).ready(function() {
             url: "./resources/php/clearbs.php",
             async: true,
             data: {
-                password: 'chocolate'
+                password: 'chocolate',
+                id: info.id
             },
             method: 'POST'
-        })
+        });
+        updatethumb();
     }
 
     function getonline(){
         $.ajax({
             url: "./resources/php/online.php",
             async: true,
+            method: 'POST',
+            data: {
+                board_id:info.id
+            },
             success: function(result){
                 $("#online").html(result);
             }
-        })
+        });
+
+    }
+
+    function updatethumb(){
+        var data = canvas.get(0).toDataURL();
+
+        $.ajax({
+            url: './resources/php/updatethumb.php',
+            async: true,
+            method: 'POST',
+            data: {
+                id: info.id,
+                data: data
+            },
+            success: function(response){
+                console.log(response);
+            }
+        });
     }
     
 });
