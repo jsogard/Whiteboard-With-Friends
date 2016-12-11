@@ -1,45 +1,113 @@
-$(document).ready(function() {
-    setInterval(function(){getbs();}, 100);
-    getonline();
-    setInterval(function(){getonline();},5000);
+$(document).ready(function(){
     
-    var maxPoints = 200;
-    
-    var color = "#3e86fa";
-    var size = 50;
-    var path = [];
-    
-    var dbindex = 0;
-    
-    var BrushStroke = function(bsColor, bsSize, bsPath){
+    var BrushStroke = function(bsShape, bsColor, bsSize, bsOpacity, bsPath){
+        this.shape = bsShape;
         this.color = bsColor;
         this.size = bsSize;
+        this.opacity = bsOpacity;
         this.path = bsPath;
     }
     
+    // BRUSH AND BUFFERS
+    var localbi = new Image(); //buffer brush image
+    var localbc = $("#localBuffer")[0]; //buffer canvas (gets drawn)
+    var localbx = localbc.getContext('2d'); //buffer context
+    localbi.onload = function(){bufferBrush(null)};
+    var servedbi = new Image();
+    var servedbc = $("#servedBuffer")[0];
+    var servedbx = servedBuffer.getContext('2d');
+    //no: servedbi.onload = function(){bufferBrush(null)};
+    
+    function hexToRgb(hex){
+        var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+        return result ? {
+            r: parseInt(result[1], 16),
+            g: parseInt(result[2], 16),
+            b: parseInt(result[3], 16)
+        } : null;
+    }
+    function bufferBrush(bs){
+        var useBrush = localbi;
+        var useContext = localbx;
+        var useSize = size;
+        var useColor = color;
+        var useOpacity = opacity;
+        if(bs != null){
+            useContext = servedbx;
+            useSize = bs.size;
+            useOpacity = bs.opacity;
+            useColor = bs.color;
+        }
+        useContext.clearRect(0, 0, 128, 128);
+        useContext.drawImage(useBrush, 64-size/2, 64-size/2, size, size);
+        var imageData = useContext.getImageData(0, 0, 128, 128);
+        var pixels = imageData.data;
+        var rgb = hexToRgb(useColor);
+        for(var i = 0; i < pixels.length; i=i+4){
+            pixels[i  ] = pixels[i  ] * rgb.r /255; // r
+            pixels[i+1] = pixels[i+1] * rgb.g /255; // g
+            pixels[i+2] = pixels[i+2] * rgb.b /255; // b
+            pixels[i+3] = pixels[i+3] * opacity;
+            
+        }
+        console.log("Buffered brush " + useSize + "px " + useColor + " " + (100*useOpacity) + "% ");
+        imageData.data = pixels;
+        useContext.putImageData(imageData, 0, 0);
+    }
+    
+    
+    // LOCAL BRUSH STROKES
+    var canvas = $("#mainCanvas");
+    var context = canvas[0].getContext("2d");
+    context.fillStyle = "#fff";
+    context.fillRect(0, 0, 640, 480);
+    
+    var mouseDown = false;
+    var color = "#3e86fa";
+    var size = 64;
+    var opacity = 1;
+    var path = [];
+    var dbindex = 0;
+    
+    
+    // LOCAL BRUSH TOOLS
+    localbi.src = "Brushes/Hard.png";
+    servedbi.src = "Brushes/Hard.png";
+    $("#brushes").hide();
+    
+    $("#shape").mouseenter(function(){
+        $("#brushes").fadeIn();
+    });
+    $("#brushes").mouseleave(function(){
+        $("#brushes").fadeOut();
+    });
+    $("#brushes").mouseleave(function(){
+        $("#brushes").fadeOut();
+    });
+    $("#brushes").on("click", "img", function(){
+        localbi.src = $(this).attr("src");
+        $("#shape").attr("src", localbi.src);
+        $("#brushes").fadeOut();
+    });
     $("#colorPicker").spectrum({
         showButtons: false,
         move: function(c){
             color = c.toHexString();
-            $("#brush").css("background-color", color);
+            bufferBrush();
         }
     });
-    
-    var canvas = $("canvas");
-    var context = canvas[0].getContext("2d");
-    var lastEvent;
-    var mouseDown = false;
-    
     $("#size").on("input change", function(){
-        var s = $("#size").val();
-        $("#brush").css("width", s/1.11 + "px");
-        $("#brush").css("height", s/1.11 + "px");
-        $("#brush").css("border-radius", s + "px");
-        size = s;
+        size = $("#size").val();
+        bufferBrush();
+    });
+    
+    $("#opacity").on("input change", function(){
+        opacity = Math.pow($("#opacity").val(), 2);
+        bufferBrush();
     });
     
     $("#exit").click(function(){
-        //TODO stop checking for updates or something
+        //TODO update thumb and stop checking for updates or something 
     });
     
     $("#save").click(function(){
@@ -49,6 +117,8 @@ $(document).ready(function() {
     });
     
     $("#erase").click(function(){
+        context.fillStyle = "#fff";
+        context.fillRect(0, 0, 640, 480);
         clearbs();
     });
 
@@ -58,87 +128,82 @@ $(document).ready(function() {
     }
     
     
+    // DRAWING ON CANVAS
     canvas.mousedown(function(e){
-        lastEvent = e;
         mouseDown = true;
         path = [];
-        path.push(lastEvent.offsetX);
-        path.push(lastEvent.offsetY);
+        path.push({x: e.offsetX, y: e.offsetY});
     }).mousemove(function(e){
-        if(mouseDown) {
-            
-            if(path.length > maxPoints-2){
-                canvas.mouseup();
-                return;
-            }
-            
-            var boxDist = Math.abs(lastEvent.offsetX-e.offsetX) + Math.abs(lastEvent.offsetY-e.offsetY);
-            
-            
-            
-            // at the beginning, accept fine strokes, but in general only accept strokes over a few pixels long
-            if(boxDist > path.length/maxPoints * 3){
-                context.lineJoin = context.lineCap = "round";
-                context.beginPath();
-                context.moveTo(lastEvent.offsetX, lastEvent.offsetY);
-
-
-
-                context.lineTo(e.offsetX, e.offsetY);
-                context.lineWidth = size *(1-path.length/maxPoints);
-                context.strokeStyle = color;
-
-                context.stroke();
-                lastEvent = e;
-                path.push(lastEvent.offsetX);
-                path.push(lastEvent.offsetY);
+        if(mouseDown){
+            var current = {x: e.offsetX, y: e.offsetY};
+            var previous = path[path.length-1];
+            var boxDist = Math.abs(previous.x-current.x) + Math.abs(previous.y-current.y);
+            if(boxDist > 2){
+                drawSegment(localbc, previous, current, null);
+                path.push(current);
             }
         }
     }).mouseup(function(){
         mouseDown = false;
-        
-        //bs = new BrushStroke("pink", size, path);
-        bs = new BrushStroke(color, size, path);
-        // send bs to server and apply it for other players
-        sendbs(bs);
-        
-        
-        applyBrushStroke(bs); // this will repeat the same stroke so it won't look different unless you modify the constructor a few lines up.
-        path = [];
+        if(path.length >= 2){
+            var bs = new BrushStroke(localbi.src, color, size, opacity, path);
+            // send bs to server and apply it for other players
+            //sendbs(bs);
+            path = [];
+            
+            bs.color = "#ff0000";
+            applyBrushStroke(bs);
+        }
     }).mouseleave(function(){
         canvas.mouseup();
     });
     
-    function applyBrushStroke(bs){
-
-        if(bs.path.length < 2)
-            return;
-        
-        var y0 = bs.path.pop();
-        var x0 = bs.path.pop();
-        bs.path.push(x0);
-        bs.path.push(y0);
-        
-        while(bs.path.length > 0){
-            context.lineJoin = context.lineCap = "round";
-            context.beginPath();
-            
-            var y = bs.path.pop();
-            var x = bs.path.pop();
-            
-            context.moveTo(x0, y0);
-                        
-            context.lineTo(x, y);
-            context.lineWidth = bs.size * (1-bs.path.length/maxPoints);
-            context.strokeStyle = bs.color;
-            
-            context.stroke();
-            
-            x0 = x;
-            y0 = y;
+    function distanceBetween(v0, v){
+        return Math.sqrt(Math.pow(v.x - v0.x, 2) + Math.pow(v.y - v0.y, 2));
+    }
+    function angleBetween(v0, v) {
+        return Math.atan2(v.x - v0.x, v.y - v0.y);
+    }
+    function drawSegment(buff, start, end, style){
+        var dist = distanceBetween(start, end);
+        var angle = angleBetween(start, end);
+        for(var i = 0; i < dist; i++){
+            x = start.x + (Math.sin(angle) * i) - 64;
+            y = start.y + (Math.cos(angle) * i) - 64;
+            context.drawImage(buff, x, y, 128, 128);
+            //for fun effects, use more parameteric functions
+            //context.drawImage(buffer,x + 100*Math.sin(path.length/5),y + 100*Math.cos(path.length/5), size, size);
+            //context.drawImage(buffer,x + 100*Math.sin(path.length/5 + Math.PI),y + 100*Math.cos(path.length/5 + Math.PI), size, size);
         }
     }
 
+    
+    // APPLY RECEIVED BRUSH STROKES
+    function applyBrushStroke(bs){
+
+        console.log("Got bs ", bs);
+        if(bs.path.length < 2)
+            return;
+        
+        console.log("Setting shape to " + bs.shape);
+        servedbi.src = bs.shape;
+        // do we need to wait?
+        
+        console.log("Buffering");
+        bufferBrush(bs);
+        
+        console.log("Drawing segments");
+        var v0 = bs.path.pop();
+        while(bs.path.length > 0){
+            var v = bs.path.pop();
+            drawSegment(servedbc, v0, v, null);
+            v0 = v;
+        }
+        console.log("Done");
+    }
+    
+    
+    // SERVER INTERACTIONS
     function sendbs(bs){
         if(bs.path.length == 0)
             return;
@@ -206,4 +271,8 @@ $(document).ready(function() {
         })
     }
     
+    
+    //setInterval(function(){getbs();}, 100);
+    //getonline();
+    //setInterval(function(){getonline();},5000);
 });
