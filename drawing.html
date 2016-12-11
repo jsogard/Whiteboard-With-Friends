@@ -10,9 +10,8 @@
 </head>
 <body>
     <ul>
-        <li><a href="">New?</a></li>
+        <li><a href="">New</a></li>
         <li><a href="">Gallery</a></li>
-        <li><a href="">Profile</a></li>
         <li><a href="">Logout</a></li>
     </ul>
     <h1>Draw</h1>
@@ -20,9 +19,10 @@
     
     <canvas id="mainCanvas"	width="640" height="480"></canvas>
     
+    <canvas id="servedBuffer" width="128" height="128" style="display:inherit;"></canvas>
+    
     <div class="tools">
         <h2>Tools</h2>
-        
         <table>
             <tr>
                 <th>Shape</th>
@@ -49,13 +49,11 @@
         
         
         
-        <canvas id="servedBuffer" width="128" height="128" style="display:inherit;"></canvas>
-        
     </div>
     <ul style="margin-top: 48px;">
-        <li class="thirds"><a id="exit" style="background-color: #84a8ed;">Exit</a></li>
-        <li class="thirds"><a id="save" style="background-color: #bce3a3;">Save PNG</a></li>
-        <li class="thirds"><a id="erase" style="background-color: #f284bf;">Erase All</a></li>
+        <li style="background-color: #84a8ed;"><a id="exit">Exit</a></li>
+        <li style="background-color: #bce3a3;"><a id="save">Save PNG</a></li>
+        <li style="background-color: #f284bf;"><a id="erase">Erase All</a></li>
     </ul>
 
     <script src="drawing.js"></script>

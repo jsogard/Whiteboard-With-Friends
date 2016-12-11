@@ -31,11 +31,11 @@ ul{
 }
 li{
     float: left;
-    width: 25%;
-}
-li.thirds{
-    float: left;
     width: 33.33333%;
+}
+li.fourths{
+    float: left;
+    width: 25%;
 }
 li a{
     display: block;
@@ -45,7 +45,7 @@ li a{
     text-decoration: none;
     margin: auto;
 }
-li:hover{
+li:hover, #exit:hover, #save:hover, #erase:hover{
     background-color: #fff;
 }
 
