@@ -1,13 +1,6 @@
 /* LOGIN CONTROLLER */
 mainApp.controller('loginCtrl', function($scope,$http,$location) {
 
-	$scope.stylesheets = [
-		{
-			href: "./styles.css",
-			type: "text/css"
-		}
-	];
-
 	$scope.error = "";
 	
 	$scope.valid = {

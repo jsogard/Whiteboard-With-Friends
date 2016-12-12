@@ -134,6 +134,7 @@ $(document).ready(function(){
     });
     
     $("#exit").click(function(){
+        updatethumb();
         $.ajax({
                 url: "./resources/php/exit.php",
                 async: false,
@@ -154,13 +155,14 @@ $(document).ready(function(){
     
     $("#erase").click(function(){
         if(info.read_write == 'read') return;
-        context.fillStyle = "#fff";
-        context.fillRect(0, 0, 640, 480);
+        erase();
         clearbs();
     });
 
     function erase(){
         context.clearRect(0, 0, 640, 480);
+        context.fillStyle = "#fff";
+        context.fillRect(0, 0, 640, 480);
         dbindex = 0;
     }
     
