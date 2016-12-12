@@ -1,0 +1,21 @@
+<ul>
+    <li><a ng-click="new()">New?</a></li>
+    <li><a ng-click="refresh()">Gallery</a></li>
+    <li><a ng-click="logout()">Logout</a></li>
+</ul>
+
+<h1 class="Title">{{ username+"'s Gallery" }}</h1>
+<h3>View shared boards and edit boards you are a member of</h3>
+
+<ul class="gallerywall">
+	<li ng-repeat="b in boards" ng-click="draw(b)">
+		<div class="thumb">
+			<h2>{{b.name}}</h2>
+			<h4>{{'by '+b.owner}}</h4>
+			<p style="color:#555555;font-size:x-small;"><i>Last modified {{b.modified}}</i></p>
+			<img class="board" ng-src="{{b.thumb}}"><br>
+			<img class="icon" src="./resources/img/read.png" ng-if="b.read_write == 'read'" style="width:35px;margin:0;float:right;margin-right:20px;">
+			<img class="icon" src="./resources/img/write.png" ng-if="b.read_write == 'write'" style="width:35px;margin:0;float:right;margin-right:20px;">
+		</div>
+	</li>
+</ul>

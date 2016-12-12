@@ -1,4 +1,31 @@
 $(document).ready(function(){
+
+    var info = {
+        username: null,
+        board_owner: null,
+        board_name: null,
+        board_id: null,
+        read_write: null
+    };
+
+    $.ajax({
+        url: "./resources/php/drawing.php",
+        async: false,
+        method: 'POST',
+        data: {
+            action: "get"
+        },
+        
+        success: function(result){
+            console.log('ajax:\n'+result);
+            info = jQuery.parseJSON(result);
+            $(".Title").html(info.name);
+            $("#owner").html("by "+info.owner);
+            $("#name").html("Hello, "+info.username);
+            
+            console.log(info);
+        }
+    });
     
     var BrushStroke = function(bsShape, bsColor, bsSize, bsOpacity, bsPath){
         this.shape = bsShape;
@@ -107,7 +134,16 @@ $(document).ready(function(){
     });
     
     $("#exit").click(function(){
-        //TODO update thumb and stop checking for updates or something 
+        $.ajax({
+                url: "./resources/php/exit.php",
+                async: false,
+                
+                success: function(result){
+                    //window.open("./login.html",'_self',false);
+                    //console.log(result);
+                    window.close();
+                }
+            });
     });
     
     $("#save").click(function(){
@@ -117,6 +153,7 @@ $(document).ready(function(){
     });
     
     $("#erase").click(function(){
+        if(info.read_write == 'read') return;
         context.fillStyle = "#fff";
         context.fillRect(0, 0, 640, 480);
         clearbs();
@@ -130,10 +167,12 @@ $(document).ready(function(){
     
     // DRAWING ON CANVAS
     canvas.mousedown(function(e){
+        if(info.read_write == 'read') return;
         mouseDown = true;
         path = [];
         path.push({x: e.offsetX, y: e.offsetY});
     }).mousemove(function(e){
+        if(info.read_write == 'read') return;
         if(mouseDown){
             var current = {x: e.offsetX, y: e.offsetY};
             var previous = path[path.length-1];
@@ -144,14 +183,15 @@ $(document).ready(function(){
             }
         }
     }).mouseup(function(){
+        if(info.read_write == 'read') return;
         mouseDown = false;
         if(path.length >= 2){
             var bs = new BrushStroke(localbi.src, color, size, opacity, path);
             // send bs to server and apply it for other players
-            //sendbs(bs);
+            sendbs(bs);
             path = [];
             
-            bs.color = "#ff0000";
+            //bs.color = "#ff0000";
             applyBrushStroke(bs);
         }
     }).mouseleave(function(){
@@ -188,9 +228,11 @@ $(document).ready(function(){
         console.log("Setting shape to " + bs.shape);
         servedbi.src = bs.shape;
         // do we need to wait?
-        
+        console.log(servedbi.src);
         console.log("Buffering");
         bufferBrush(bs);
+
+        bs.path = bs.path.reverse();
         
         console.log("Drawing segments");
         var v0 = bs.path.pop();
@@ -211,23 +253,26 @@ $(document).ready(function(){
         console.log("length: "+s.length+"\npath len: "+bs.path.length);
         console.log("sending bs");
         $.ajax({
-            url: "./sendbs.php",
+            url: "./resources/php/sendbs.php",
             async: true,
             data: {
                 password: 'chocolate',
-                stroke: s
+                stroke: s,
+                id: info.id
             },
             method: 'POST'
         });
+        updatethumb();
     }
 
     function getbs(){
         if(mouseDown) return;
         $.ajax({
-            url: "./getbs.php",
+            url: "./resources/php/getbs.php",
             async: true,
             data: {
-                password: 'chocolate'
+                password: 'chocolate',
+                id: info.id
             },
             method: 'POST',
             success: function(result){
@@ -252,27 +297,51 @@ $(document).ready(function(){
 
     function clearbs(){
         $.ajax({
-            url: "./clearbs.php",
+            url: "./resources/php/clearbs.php",
             async: true,
             data: {
-                password: 'chocolate'
+                password: 'chocolate',
+                id: info.id
             },
             method: 'POST'
-        })
+        });
+        updatethumb();
     }
 
     function getonline(){
         $.ajax({
-            url: "./online.php",
+            url: "./resources/php/online.php",
             async: true,
+            method: 'POST',
+            data: {
+                board_id:info.id
+            },
             success: function(result){
                 $("#online").html(result);
             }
-        })
+        });
+
+    }
+
+    function updatethumb(){
+        var data = canvas.get(0).toDataURL();
+
+        $.ajax({
+            url: './resources/php/updatethumb.php',
+            async: true,
+            method: 'POST',
+            data: {
+                id: info.id,
+                data: data
+            },
+            success: function(response){
+                console.log(response);
+            }
+        });
     }
     
     
-    //setInterval(function(){getbs();}, 100);
-    //getonline();
-    //setInterval(function(){getonline();},5000);
+    setInterval(function(){getbs();}, 100);
+    getonline();
+    setInterval(function(){getonline();},5000);
 });

@@ -22,6 +22,7 @@ if($result == false || mysqli_num_rows($result) == 0)
 	INSERT INTO users(username,password,online)
 	VALUES(\"".$json->username."\",\"".$json->password."\",0);";
 	mysqli_query($link,$query);
+	mysqli_query($link,"INSERT INTO online(user,board_id) VALUES (\"".$json->username."\",\"\");")
 }
 else
 {

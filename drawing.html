@@ -9,18 +9,16 @@
     <link rel='stylesheet' href='spectrum/spectrum.css'/>
 </head>
 <body>
-    <ul>
-        <li><a href="">New</a></li>
-        <li><a href="">Gallery</a></li>
-        <li><a href="">Logout</a></li>
-    </ul>
-    <h1>Draw</h1>
-    <h3>Who is drawing with you?</h3>
+    <h1 class="Title">Draw</h1>
+    <h3 id="owner"></h3>
+    <h3 id="name"></h3>
+    <p id="online"></p>
     
-    <canvas id="mainCanvas"	width="640" height="480"></canvas>
+    <canvas id="mainCanvas" width="640" height="480"></canvas>
     
     <canvas id="servedBuffer" width="128" height="128" style="display:inherit;"></canvas>
     
+    <span id="tools">
     <div class="tools">
         <h2>Tools</h2>
         <table>
@@ -50,12 +48,13 @@
         
         
     </div>
+    </span>
     <ul style="margin-top: 48px;">
         <li style="background-color: #84a8ed;"><a id="exit">Exit</a></li>
         <li style="background-color: #bce3a3;"><a id="save">Save PNG</a></li>
         <li style="background-color: #f284bf;"><a id="erase">Erase All</a></li>
     </ul>
 
-    <script src="drawing.js"></script>
+    <script src="./resources/js/drawing.js"></script>
 </body>
 </html>

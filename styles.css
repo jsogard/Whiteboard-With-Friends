@@ -31,11 +31,11 @@ ul{
 }
 li{
     float: left;
-    width: 33.33333%;
-}
-li.fourths{
-    float: left;
     width: 25%;
+}
+li.thirds{
+    float: left;
+    width: 33.33333%;
 }
 li a{
     display: block;
@@ -45,7 +45,7 @@ li a{
     text-decoration: none;
     margin: auto;
 }
-li:hover, #exit:hover, #save:hover, #erase:hover{
+li:hover{
     background-color: #fff;
 }
 
@@ -107,4 +107,33 @@ canvas{
     position: absolute;
     bottom: 0px;
     padding: 12px;
+}
+
+/* LOGIN PAGE */
+
+#form {
+    background-color: #fff;
+    padding:30px;
+    padding-top:0;
+    box-shadow: 0 4px 10px 0 #222;
+    border-radius: 20px;
+    margin:auto;
+    width:365px;
+    margin-top:0;
+
+}
+#form div{
+    display: inline-block;
+}
+#break {
+    width:2px;
+    height:190px;
+    background: #c0cdd8;
+    margin: 0 20px 0 20px;
+}
+#hello{
+    margin: 20px;
+}
+input{
+    margin-bottom: 20px;
 }
