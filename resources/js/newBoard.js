@@ -63,7 +63,7 @@ mainApp.controller('newBoardCtrl', function($scope, $location, $http, $window) {
 
 		$.ajax({
 			url: "./resources/php/newBoard.php",
-			async: true,
+			async: false,
 			
 			data: {
 				"json":b

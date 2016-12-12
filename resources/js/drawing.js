@@ -342,7 +342,7 @@ $(document).ready(function(){
                 data: data
             },
             success: function(response){
-                console.log(response);
+                console.log('updatethumb: '+response);
             }
         });
     }

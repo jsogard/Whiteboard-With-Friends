@@ -36,6 +36,7 @@ mainApp.controller('loginCtrl', function($scope,$http,$location) {
 		$.ajax({
 			method: 'POST',
 			url: './resources/php/login.php',
+			async: false,
 			data: {
 				username: user,
 				password: pwd
@@ -45,7 +46,8 @@ mainApp.controller('loginCtrl', function($scope,$http,$location) {
 				if(response.length == 0)
 				{
 					username = user;
-					$location.url('/gallery');	
+					console.log('changing location url');
+					$location.url('/gallery');
 				}
 				else
 				{
@@ -113,6 +115,7 @@ mainApp.controller('loginCtrl', function($scope,$http,$location) {
 		$.ajax({
 			method: 'POST',
 			url: './resources/php/signup.php',
+			async: false,
 			data: {
 				username: user,
 				password: pwd
