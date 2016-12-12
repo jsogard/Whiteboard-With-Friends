@@ -13,7 +13,11 @@
 			<h2>{{b.name}}</h2>
 			<h4>{{'by '+b.owner}}</h4>
 			<p style="color:#555555;font-size:x-small;"><i>Last modified {{b.modified}}</i></p>
-			<img class="board" ng-src="{{b.thumb}}"><br>
+			<img class="board" ng-src="{{b.thumb}}" ><br>
+			<img class="icon" ng-init="icon='trashclose.png'" ng-src="./resources/img/{{icon}}" 
+				 ng-mouseover="icon='trashopen.png'" ng-mouseleave="icon='trashclose.png'"
+				 ng-if="b.owner == username" style="width:35px;margin:0;float:left;margin-left:20px;"
+				 ng-click="delete(b); $event.stopPropagation();">
 			<img class="icon" src="./resources/img/read.png" ng-if="b.read_write == 'read'" style="width:35px;margin:0;float:right;margin-right:20px;">
 			<img class="icon" src="./resources/img/write.png" ng-if="b.read_write == 'write'" style="width:35px;margin:0;float:right;margin-right:20px;">
 		</div>

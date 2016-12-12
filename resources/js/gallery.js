@@ -15,15 +15,33 @@ mainApp.controller('galleryCtrl', function($scope, $route, $location, $http, $wi
 	
 	$scope.username = username;
 
-	$http({
-		method: 'POST',
-		url: './resources/php/galleryboards.php'
-	}).then(function(results){
-		results = results.data;
-		console.log('Coded:\n'+results);
-		console.log('JSON:\n'+angular.fromJson(results));
-		$scope.boards = angular.fromJson(results);
-	});
+	$scope.delete = function(board){
+		$.ajax({
+			url: './resources/php/deleteboard.php',
+			method: 'POST',
+			async: false,
+			data: {
+				id:board.id
+			},
+			success: function(response){
+				console.log('deleteboard.php:\n'+response);
+				$scope.init();
+			}
+		});
+	};
+
+	$scope.init = function(){
+		$http({
+			method: 'POST',
+			url: './resources/php/galleryboards.php'
+		}).then(function(results){
+			results = results.data;
+			console.log('Coded:\n'+results);
+			console.log('JSON:\n'+angular.fromJson(results));
+			$scope.boards = angular.fromJson(results);
+		});
+	};
+	$scope.init();
 
 	$scope.refresh = function(){
 		$route.reload();
