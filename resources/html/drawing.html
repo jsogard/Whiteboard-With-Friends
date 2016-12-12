@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>White board with Friends - collaborative drawing</title>
+    <link rel="stylesheet" type="text/css" href="style2.css">
+    <link href="https://fonts.googleapis.com/css?family=Shrikhand" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script>
+    $(document).ready(function(){
+        $.ajax({
+            url: "./index.php",
+            async: true,
+            
+            success: function(result){
+                if(result.length == 0)
+                {
+                    window.open("./login.html",'_self',false);
+                }
+                else
+                {
+                    $('#name').html("Hello, "+result+"!");
+                }
+            }
+        });
+        $("#exit").click(function(){
+            $.ajax({
+                url: "./signout.php",
+                async: false,
+                
+                success: function(result){
+                    window.open("./login.html",'_self',false);
+                }
+            });
+        });
+    });
+    </script>
+    <style>
+    #online{
+        text-align: center;
+        max-width: 560px;
+        margin: auto;
+        margin-bottom: 20px;
+        margin-top: -15px;
+    }
+    </style>
+    <script src='spectrum/spectrum.js'></script>
+    <link rel='stylesheet' href='spectrum/spectrum.css'/>
+</head>
+<body>
+    <h1 class="Title">White board with friends</h1>
+    <h3 id="name"></h3>
+    <p id="online"></p>
+    <canvas	width="640" height="480"></canvas>
+    
+    
+    
+    <div class="tools">
+        <h2>Tools</h2>
+        
+        <table>
+            <tr>
+                <th>Color</th>
+                <th>Size</th>
+                <th>Preview</th>
+            </tr>
+            <tr>
+                <td><input type="text" value="#3e86fa" id="colorPicker"/></td>
+                <td><input type="range" min="1" max="100" id="size"/></td>
+                <td><div id="brush"></div></td>
+            </tr>
+            
+        </table>
+        
+    </div>
+
+    <table style="width:100%;margin-top:50px;">
+        <td><button id="exit" style="background-color: #84a8ed;">Exit</button></td>
+        <td><button id="save" style="background-color: #bce3a3;">Save PNG</button></td>
+        <td><button id="erase" style="background-color: #f284bf;">Erase All</button></td>
+    </table>
+
+    <script src="drawing.js"></script>
+</body>
+</html>
