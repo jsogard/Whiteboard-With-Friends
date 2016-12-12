@@ -33,6 +33,27 @@ mainApp.controller('loginCtrl', function($scope,$http,$location) {
 			return;
 		}
 
+		$.ajax({
+			method: 'POST',
+			url: './resources/php/login.php',
+			data: {
+				username: user,
+				password: pwd
+			},
+			success: function(response){
+				console.log(response);
+				if(response.length == 0)
+				{
+					username = user;
+					$location.url('/gallery');	
+				}
+				else
+				{
+					$scope.error = response;
+				}
+			}
+		});
+		/*
 		$http({
 			method: 'POST',
 			url: './resources/php/login.php',
@@ -59,6 +80,7 @@ mainApp.controller('loginCtrl', function($scope,$http,$location) {
 		}, function(error){
 			console.log("Login error: "+error);
 		});
+		*/
 	};
 
 	$scope.signup = function(user, pwd, con){
@@ -87,24 +109,26 @@ mainApp.controller('loginCtrl', function($scope,$http,$location) {
 			$scope.error = "Passwords not same";
 			return;
 		}
-		$http({
+
+		$.ajax({
 			method: 'POST',
 			url: './resources/php/signup.php',
 			data: {
 				username: user,
 				password: pwd
 			},
-			headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-		}).then(function(results){
-			results = results.data;
-			console.log('Server connected: "'+results+"\"");
-			if((results+'').length < 50) $scope.error = results;
-			if(results != "")
-			{
-				$scope.valid.signup.username = "#FF5C5C";
+			success: function(response){
+				console.log(response);
+				if(response.length == 0)
+				{
+					username = user;
+					$location.url('/gallery');	
+				}
+				else
+				{
+					$scope.error = response;
+				}
 			}
-		},function(error){
-			console.log("Signup error: "+error);
 		});
 	}
 
