@@ -1,3 +1,5 @@
+White Board with Friends
+Made by Rob Quinn and Joe Sogard
 
 
 
