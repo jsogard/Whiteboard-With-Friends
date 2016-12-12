@@ -43,7 +43,7 @@ $(document).ready(function(){
     var servedbi = new Image();
     var servedbc = $("#servedBuffer")[0];
     var servedbx = servedBuffer.getContext('2d');
-    //no: servedbi.onload = function(){bufferBrush(null)};
+    servedbi.onload = function(){console.log("served brush image loaded " + servedbi.src);};
     
     function hexToRgb(hex){
         var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
@@ -223,7 +223,6 @@ $(document).ready(function(){
     // APPLY RECEIVED BRUSH STROKES
     function applyBrushStroke(bs){
 
-        console.log("Got bs ", bs);
         if(bs.path.length < 2)
             return;
         
@@ -231,7 +230,6 @@ $(document).ready(function(){
         servedbi.src = bs.shape;
         // do we need to wait?
         console.log(servedbi.src);
-        console.log("Buffering");
         bufferBrush(bs);
 
         bs.path = bs.path.reverse();
@@ -346,4 +344,5 @@ $(document).ready(function(){
     setInterval(function(){getbs();}, 100);
     getonline();
     setInterval(function(){getonline();},5000);
+    updatethumb();
 });
