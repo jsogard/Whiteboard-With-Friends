@@ -42,8 +42,8 @@ $(document).ready(function(){
     localbi.onload = function(){bufferBrush(null)};
     var servedbi = new Image();
     var servedbc = $("#servedBuffer")[0];
-    var servedbx = servedBuffer.getContext('2d');
-    servedbi.onload = function(){console.log("served brush image loaded " + servedbi.src);};
+    var servedbx = servedbc.getContext('2d');
+    servedbi.onload = null;//function(){console.log("served brush image loaded " + servedbi.src);};
     
     function hexToRgb(hex){
         var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
@@ -60,13 +60,14 @@ $(document).ready(function(){
         var useColor = color;
         var useOpacity = opacity;
         if(bs != null){
+            useBrush = servedbi;
             useContext = servedbx;
             useSize = bs.size;
             useOpacity = bs.opacity;
             useColor = bs.color;
         }
         useContext.clearRect(0, 0, 128, 128);
-        useContext.drawImage(useBrush, 64-size/2, 64-size/2, size, size);
+        useContext.drawImage(useBrush, 64-useSize/2, 64-useSize/2, useSize, useSize);
         var imageData = useContext.getImageData(0, 0, 128, 128);
         var pixels = imageData.data;
         var rgb = hexToRgb(useColor);
@@ -74,7 +75,7 @@ $(document).ready(function(){
             pixels[i  ] = pixels[i  ] * rgb.r /255; // r
             pixels[i+1] = pixels[i+1] * rgb.g /255; // g
             pixels[i+2] = pixels[i+2] * rgb.b /255; // b
-            pixels[i+3] = pixels[i+3] * opacity;
+            pixels[i+3] = pixels[i+3] * useOpacity;
             
         }
         console.log("Buffered brush " + useSize + "px " + useColor + " " + (100*useOpacity) + "% ");
@@ -194,7 +195,7 @@ $(document).ready(function(){
             path = [];
             
             //bs.color = "#ff0000";
-            applyBrushStroke(bs);
+            //applyBrushStroke(bs);
         }
     }).mouseleave(function(){
         canvas.mouseup();
@@ -227,21 +228,27 @@ $(document).ready(function(){
             return;
         
         console.log("Setting shape to " + bs.shape);
-        servedbi.src = bs.shape;
         // do we need to wait?
-        console.log(servedbi.src);
-        bufferBrush(bs);
-
-        bs.path = bs.path.reverse();
         
-        console.log("Drawing segments");
-        var v0 = bs.path.pop();
-        while(bs.path.length > 0){
-            var v = bs.path.pop();
-            drawSegment(servedbc, v0, v, null);
-            v0 = v;
-        }
-        console.log("Done");
+        servedbi.src = null;
+        servedbi.src = bs.shape;
+        //servedbi.onload = function(){
+            console.log("Buffering served brush");
+            bufferBrush(bs);
+
+            bs.path = bs.path.reverse();
+
+            console.log("Drawing segments");
+            var v0 = bs.path.pop();
+            while(bs.path.length > 0){
+                var v = bs.path.pop();
+                drawSegment(servedbc, v0, v, null);
+                v0 = v;
+            }
+            console.log("Done");
+        //};
+        //console.log("Setting src");
+        //servedbi.src = bs.shape;
     }
     
     
@@ -345,4 +352,11 @@ $(document).ready(function(){
     getonline();
     setInterval(function(){getonline();},5000);
     updatethumb();
+});
+
+$(document).ready(function(){
+    console.log("Note: Don't use refresh or back please");
+    $(window).on('beforeunload', function(){
+        return "Please do not use the browser's refresh";
+    });
 });

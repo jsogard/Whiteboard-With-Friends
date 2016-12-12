@@ -63,3 +63,10 @@ mainApp.controller('galleryCtrl', function($scope, $route, $location, $http, $wi
 		$window.open('./drawing.html');
 	};
 });
+
+$(document).ready(function(){
+    console.log("Note: Don't use refresh or back please");
+    $(window).on('beforeunload', function(){
+        return "Please do not use the browser's refresh";
+    });
+});

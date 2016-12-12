@@ -16,7 +16,8 @@ $query = "
 	WHERE public=1
 	OR owner='".$name."'
 	OR writers LIKE '%[".$name."]%'
-	OR readers LIKE '%[".$name."]%';";
+	OR readers LIKE '%[".$name."]%'
+    ORDER BY id DESC;";
 
 $results = mysqli_query($link,$query);
 
@@ -31,7 +32,7 @@ while($row = mysqli_fetch_row($results))
 		'thumb' => './resources/img/boards/'.$row[0].'.png?'.time(),
 		'modified' => $row[4]
 	];
-	if($row[2] == $name || strpos($row[3],'['.$name.']') != false)
+	if($row[2] == $name || strpos($row[3],'['.$name.']') !== false)
 		$data['read_write'] = 'write';
 	else
 		$data['read_write'] = 'read';

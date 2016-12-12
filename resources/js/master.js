@@ -42,10 +42,3 @@ mainApp.config(['$routeProvider', function($routeProvider) {
 		redirectTo: '/login'
 	});
 }]);
-
-$(document).ready(function(){
-    console.log("Note: Don't use refresh or back please");
-    $(window).on('beforeunload', function(){
-        return "Please do not use the browser's refresh";
-    });
-});
