@@ -39,13 +39,14 @@ var_dump($json,$writers,$readers);
 
 
 $query = "
-	INSERT INTO boards(owner,name,writers,readers,public,creation)
+	INSERT INTO boards(owner,name,writers,readers,public,creation,modified)
 	VALUES (
 		\"".$json->owner."\",
 		\"".$json->name."\",
 		\"".$writers."\",
 		\"".$readers."\",
 		".$json->public.",
+		NOW(),
 		NOW());";
 
 echo $query;

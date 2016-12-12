@@ -18,6 +18,16 @@ mainApp.controller('newBoardCtrl', function($scope, $location, $http, $window) {
 
 	$scope.error = "";
 
+	$scope.logout = function(){
+		$http({
+			method: 'POST',
+			url: './resources/php/signout.php'
+		}).then(function(results){
+			username = null;
+			$location.url('/login');
+		});
+	};
+
 	$scope.submit = function(){
 		$scope.error = "";
 		if($scope.board.name == null || $scope.board.name.length == 0)

@@ -19,9 +19,7 @@ $query = "
 $results = mysqli_query($link,$query);
 $old = mysqli_fetch_row($results)[0];
 $token = "[".$board_id."]";
-$pos = strpos($old,$token);
-$new = substr($old,0,$pos);
-$new .= substr($old,$pos+strlen($token)+1);
+$new = str_replace($token,"",$old);
 
 echo "Old: ".$old;
 echo "     New: ".$new;
