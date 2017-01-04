@@ -17,14 +17,14 @@ elseif($_POST['action'] == "set")
 		'read_write' => $_POST['read_write']
 	];
 	$link = mysqli_connect(
-		"mysql.cs.iastate.edu",
-		"dbu319t17",
-		"g=frAr4s",
-		"db319t17");
+		"192.169.0.33",
+		"root",
+		"fsh36w44",
+		"whiteboard");
 	$query = "
-		UPDATE online
-		SET board_id = CONCAT(board_id,'[".$_POST['id']."]')
-		WHERE user=\"".$_SESSION['user']['username']."\";";
+		INSERT INTO Online(user,board_id)
+		VALUES(\"".$_SESSION['user']['username']."\",
+		\"".$_POST['id'].");";
 	mysqli_query($link,$query);
 }
 

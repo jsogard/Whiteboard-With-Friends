@@ -3,20 +3,14 @@
 $id = $_POST['id'];
 
 $link = mysqli_connect(
-	"mysql.cs.iastate.edu",
-	"dbu319t17",
-	"g=frAr4s",
-	"db319t17");
+	"192.169.0.33",
+	"root",
+	"fsh36w44",
+	"whiteboard");
 
 $query = "
-	DELETE FROM boards
+	DELETE FROM Board
 	WHERE id=".$id.";";
-
-mysqli_query($link,$query);
-
-$query = "
-	DELETE FROM strokes
-	WHERE board_id=".$id.";";
 
 mysqli_query($link,$query);
 

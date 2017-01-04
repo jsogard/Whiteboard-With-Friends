@@ -3,10 +3,12 @@
 session_start();
 
 $link = mysqli_connect(
-	"mysql.cs.iastate.edu",
-	"dbu319t17",
-	"g=frAr4s",
-	"db319t17");
+	"192.169.0.33",
+	"root",
+	"fsh36w44",
+	"whiteboard");
+
+// format data
 
 $json = json_decode($_POST['json']);
 
@@ -18,33 +20,31 @@ else
 if($json->owner == null || $json->owner == "")
 	$json->owner = $_SESSION['user']['username'];
 
-$writers = "";
+$writers = Array();
 if($json->writers != null){
 	foreach ($json->writers as $key => $value) {
 		if($value == null) continue;
-		$writers .= '['.$value.']';
+		array_push($writers,$value);
 	}
 }
 
-
-$readers = "";
+$readers = Array();
 if($json->readers != null){
 	foreach ($json->readers as $key => $value) {
 		if($value == null) continue;
-		$readers .= '['.$value.']';
+		array_push($readers,$value);
 	}
 }
 
 var_dump($json,$writers,$readers);
 
+// create board
 
 $query = "
-	INSERT INTO boards(owner,name,writers,readers,public,creation,modified)
+	INSERT INTO Board(owner,title,public,creation,modified)
 	VALUES (
 		\"".$json->owner."\",
 		\"".$json->name."\",
-		\"".$writers."\",
-		\"".$readers."\",
 		".$json->public.",
 		NOW(),
 		NOW());";
@@ -53,17 +53,31 @@ echo $query;
 
 mysqli_query($link,$query);
 
+// get id of board inserted to create a thumbnail for it
+
 $query = "
 	SELECT id
-	FROM boards
+	FROM Board
 	WHERE owner=\"".$json->owner."\"
-	AND name=\"".$json->name."\";";
+	AND title=\"".$json->name."\"
+	LIMIT 1
+	ORDER BY id DESC;";
 
 $results = mysqli_query($link,$query);
 
 $id = mysqli_fetch_row($results)[0];
 
 copy('./../img/boards/default.png','./../img/boards/'.$id.".png");
+
+// mark user as online on the board
+
+$query = "
+	INSERT INTO Online(user, board_id)
+	VALUES(\"".$json->owner."\",".$id.");";
+
+mysqli_query($link,$query);
+
+// update session (is this at all necessary???)
 
 $_SESSION['board'] = [
 	'id' => $id,

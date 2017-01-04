@@ -3,40 +3,35 @@
 // mysql -h mysql.cs.iastate.edu -u dbu319t17 -p db319t17
 
 $link = mysqli_connect(
-	"mysql.cs.iastate.edu",
-	"dbu319t17",
-	"g=frAr4s",
-	"db319t17");
+	"192.169.0.33",
+	"root",
+	"fsh36w44",
+	"whiteboard");
 
 $query = "
 SELECT password
-FROM users
-WHERE username=\"".$_POST['username']."\";";
+FROM User
+WHERE name=\"".$_POST['username']."\";";
 
 $result = mysqli_query($link,$query);
 
 if($result == false || mysqli_num_rows($result) == 0)
 {
-	echo "Username Not Found";
+	echo "Username not found";
 }
 else
 {
 	$row = mysqli_fetch_row($result);
-	if($_POST['password'] == $row[0])
+	if(md5($_POST['password']) == $row[0])
 	{
 		echo "";
 		session_start();
 		$_SESSION['user'] = Array(
 			'username' => $_POST['username']);
-		$query = "
-			UPDATE users
-			SET online=1
-			WHERE username='".$_POST['username']."';";
-		mysqli_query($link,$query);
 	}
 	else
 	{
-		echo "Password Incorrect";
+		echo "Password incorrect";
 	}
 }
 

@@ -3,36 +3,39 @@
 session_start();
 
 $link = mysqli_connect(
-	"mysql.cs.iastate.edu",
-	"dbu319t17",
-	"g=frAr4s",
-	"db319t17");
+	"192.169.0.33",
+	"root",
+	"fsh36w44",
+	"whiteboard");
 
 $query = "
-SELECT user
-FROM online
-WHERE user<>'".$_SESSION['user']['username']."' 
-AND board_id LIKE '%[".$_POST['board_id']."]%';";
+	SELECT user
+	FROM Online
+	WHERE user<>'".$_SESSION['user']['username']."' 
+	AND board_id='".$_POST['board_id']."';";
 
 $result = mysqli_query($link,$query);
 
 $colors = Array(
-	'aa0000',
-	'99004d',
-	'008282',
-	'5858ff',
-	'a25203',
-	'ff7f50',
-	'ff569e',
-	'2c5b74',
-	'fe5656'
+	'#f00',
+	'#f80',
+	'#ff0',
+	'#8f0',
+	'#0f0',
+	'#0f8',
+	'#0ff',
+	'#08f',
+	'#00f',
+	'#80f',
+	'#f0f',
+	'#f08'
 );
 
 function get_color($name,$colors,$index=-1){
 	$color = $colors[rand(0,count($colors)-1)];
 	if($index >= count($colors))
 		$index = $index % count($colors);
-	return "<span style='color:#".($index == -1 ? $color : $colors[$index])."'>".$name."</span>";
+	return "<span style='color:".($index == -1 ? $color : $colors[$index])."'>".$name."</span>";
 }
 
 if($result == false || mysqli_num_rows($result) == 0)
